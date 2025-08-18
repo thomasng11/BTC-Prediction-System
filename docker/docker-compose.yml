@@ -1,0 +1,46 @@
+name: btc-prediction-system
+
+services:
+  pipeline:
+    container_name: pipeline
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ../data:/app/data
+      - ../models:/app/models
+    command: python src/pipeline.py
+    environment:
+      - PYTHONPATH=/app/src
+      - BACKFILL_HOURS=${BACKFILL_HOURS:-2}
+      - TZ=Asia/Hong_Kong
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  dashboard:
+    container_name: dashboard
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ../data:/app/data
+      - ../models:/app/models
+    command: streamlit run src/dashboard.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONPATH=/app/src
+      - TZ=Asia/Hong_Kong
+    restart: unless-stopped
+
+volumes:
+  data:
+  models:
