@@ -79,8 +79,8 @@ class DataPipeline:
 
     @log("Checks to see if model training is needed")
     def model_training_process(self):
-        training_timestamps = self.db_manager.get_timestamps('training_history', from_time=datetime(2022, 1, 1))
-        latest_training_time = max(training_timestamps) if training_timestamps else datetime(2022, 1, 1)
+        training_timestamps = self.db_manager.get_timestamps('training_history', from_time=datetime(2024, 1, 1))
+        latest_training_time = max(training_timestamps) if training_timestamps else datetime(2024, 1, 1)
 
         features_df = self.db_manager.get('features', from_time=latest_training_time)
         features_df = features_df.sort_values('timestamp')

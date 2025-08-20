@@ -42,7 +42,7 @@ class FeatureExtractor:
             for w, label in rolling_windows.items():
                 df[f'{crypto}_volatility_{label}'] = df[f'{crypto}_return'].rolling(window=w).std()
                 df[f'{crypto}_ma_{label}'] = df[f'{crypto}_close'].rolling(window=w).mean()
-                df[f'{crypto}_momentum_{label}'] = (df[f'{crypto}_close'] - df[f'{crypto}_close'].shift(w)) / df[f'{crypto}_close'].shift(w)
+                df[f'{crypto}_momentum_{label}'] = df[f'{crypto}_close'] - df[f'{crypto}_close'].shift(w)
 
         return df.dropna()
     

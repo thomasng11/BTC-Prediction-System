@@ -208,7 +208,7 @@ class CryptoNewsScraper:
                 
             # Naviagate to each article page to extract title and summary
             articles_data = []
-            for info in tqdm(article_info, desc="Extracting summary"):
+            for info in article_info:
                 try:
                     url, timestamp = info['url'], info['timestamp']
                     title, summary = self._extract_summary(url)
